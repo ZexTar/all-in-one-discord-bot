@@ -1,7 +1,9 @@
 const Discord = require('discord.js');
 const config = require('./config.json');
+const sql = require("sqlite");
 
 const client = new Discord.Client();
+sql.open("./scores.sqlite");
 
 client.on("message", async message => {
 	const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
@@ -76,10 +78,10 @@ client.on("message", async message => {
   
   	if(command === "purge") {
     
-    	const deleteCount = parseInt(args[0], 1);
+    	const deleteCount = parseInt(args[0], 20);
     
-    	if(!deleteCount || deleteCount < 1 || deleteCount > 100)
-      		return message.reply("unesi broj izmedju 1 i 100");
+    	if(!deleteCount || deleteCount < 2 || deleteCount > 100)
+      		return message.reply("unesi broj izmedju 2 i 100");
     
     	const fetched = await message.channel.fetchMessages({count: deleteCount});
     	message.channel.bulkDelete(fetched)
@@ -110,5 +112,56 @@ client.on('message', message => {
 			}
 		}
 });
+
+client.on("message", message => {
+	const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+  	const command = args.shift().toLowerCase();
+
+  	if (command === "+rep"){
+  		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
+    	if (!row) {
+      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), 25]);
+    	} else {
+      		sql.run(`UPDATE scores SET reputation = ${row.reputation + 25} WHERE userId = ${args[0].slice(2,20)}`);
+    	}
+ 		}).catch(() => {
+    		console.error;
+      		sql.run("CREATE TABLE IF NOT EXISTS scores (userId TEXT, reputation INTEGER)").then(() => {
+      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
+    		});
+  		});
+  		message.channel.send(`${args[0].slice(0,21)} je zaradio 25 poena!!!`);
+ 	}
+
+  	if (command === "-rep"){
+  		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
+    	if (!row) {
+      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), -15]);
+    	} else {
+      		sql.run(`UPDATE scores SET reputation = ${row.reputation - 15} WHERE userId = ${args[0].slice(2,20)}`);
+    	}
+  		}).catch(() => {
+    		console.error;
+      		sql.run("CREATE TABLE IF NOT EXISTS scores (userId TEXT, reputation INTEGER)").then(() => {
+      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
+    		});
+  		});
+  		message.channel.send(`${args[0].slice(0,21)} je izgubio 15 poena!!!`)
+ 	}
+
+ 	if(command === "rep"){
+    	sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
+      	if (!row) return message.reply("Tvoja reputacija je 0!");
+      		message.reply(`Tvoja reputacija je ${row.reputation}!`);
+    	});
+  	}
+
+ 	if(command === "showrep"){
+    sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
+    	if (!row) return message.reply(`${args[0].slice(0,21)} ima reputaciju 0!`);
+      		message.reply(`${args[0].slice(0,21)} ima reputaciju ${row.reputation}!`);
+    	});
+  	} 
+})
 
 client.login(config.token);
