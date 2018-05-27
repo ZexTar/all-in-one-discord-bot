@@ -98,4 +98,17 @@ client.on("message", async message => {
   }
 })
 
+client.on('message', message => {
+	if (message.channel.id === '450015304911945729' || message.channel.id === '261953065970696192'
+	|| message.channel.id === '444493781119664139')
+		if (message.content.includes('!play') || (message.member.id === '235088799074484224')
+		|| message.content.includes('!leave')){
+			message.delete();
+			if (message.member.id !== '235088799074484224'){
+			message.author.send('bem ti dete imas muzik kanal!!!');
+			message.channel.send('radim na djubrici');
+			}
+		}
+});
+
 client.login(config.token);
