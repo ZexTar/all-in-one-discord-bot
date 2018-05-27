@@ -84,6 +84,17 @@ client.on("message", async message => {
     	const fetched = await message.channel.fetchMessages({count: deleteCount});
     	message.channel.bulkDelete(fetched)
       		.catch(error => message.reply(`Bem ti kevu: ${error}`));
+ 	}
+
+ 	if(command === "ping") {
+    	const m = await message.channel.send("Ping?");
+    	m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+  	}
+
+  	if(command === "say") {
+    	const sayMessage = args.join(" ");
+    	message.delete().catch(O_o=>{}); 
+    	message.channel.send(sayMessage);
   }
 })
 
