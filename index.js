@@ -76,18 +76,6 @@ client.on("message", async message => {
     		message.reply(`${member.user.tag} je popio bancinu od strane ${message.author.tag} zbog: ${reason}`);
   	}
   
-  	if(command === "purge") {
-    
-    	const deleteCount = parseInt(args[0], 20);
-    
-    	if(!deleteCount || deleteCount < 2 || deleteCount > 100)
-      		return message.reply("unesi broj izmedju 2 i 100");
-    
-    	const fetched = await message.channel.fetchMessages({count: deleteCount});
-    	message.channel.bulkDelete(fetched)
-      		.catch(error => message.reply(`Bem ti kevu: ${error}`));
- 	}
-
  	if(command === "ping") {
     	const m = await message.channel.send("Ping?");
     	m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
@@ -162,6 +150,11 @@ client.on("message", message => {
       		message.reply(`${args[0].slice(0,21)} ima reputaciju ${row.reputation}!`);
     	});
   	} 
+
+  	if(command === "help"){
+    	message.reply(`commands: \n \n !kick @user - kikuj djidjana \n \n !mute @user - mutuj djidjana \n \n !unmute @user - unmutuj djidjana \n \n !ban @user - banuj djidjana \n \n !ping - proveri ping \n \n !say nesto - reci cigiju da slaze \n \n !+rep @user - povecaj nekom reputaciju \n \n !-rep @user - smanji nekom reputaciju \n \n !rep - proveri svoju reputaciju \n \n !showrep @user - proveri neciju reputaciju`);
+  	}
+
 })
 
 client.login(config.token);
