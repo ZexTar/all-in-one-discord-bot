@@ -122,74 +122,74 @@ client.on("message", message => {
     let vreme;
 
     if (message.author.id !== "449929510645661696"){
-  	if (command === "+rep"){
-      sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
-      if (!row){
-        sql.run("INSERT INTO scores (userId, reputation, time) VALUES (?, ?, ?)", [message.author.id, 0, 0]);
-        vreme = 0;
-      }
-      else {
-        sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
-        vreme = row.time;
-      }
-      if (message.author.id !== `${args[0]}`.slice(2,20)){
-      if (timestamp === vreme){
-        message.author.send('maksimalni broj tipova je 2 po danu');
-        message.channel.send('.!.');
-      }
-      else{
-  		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
-    	if (!row) {
-      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), 25]);
+    	if (command === "+rep"){
+        sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
+        if (!row){
+          sql.run("INSERT INTO scores (userId, reputation, time) VALUES (?, ?, ?)", [message.author.id, 0, 0]);
+          vreme = 0;
+        }
+        else {
+          sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
+          vreme = row.time;
+        }
+        if (message.author.id !== `${args[0]}`.slice(2,20)){
+        if (timestamp === vreme){
+          message.author.send('maksimalni broj tipova je 2 po danu');
+          message.channel.send('.!.');
+        }
+        else{
+      		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
+        	if (!row) {
+          		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), 25]);
 
-    	} else {
-      		sql.run(`UPDATE scores SET reputation = ${row.reputation + 25} WHERE userId = ${args[0].slice(2,20)}`);
-    	}
- 		  }).catch(() => {
-    		console.error;
-      		sql.run("CREATE TABLE IF NOT EXISTS scores (userId TEXT, reputation INTEGER)").then(() => {
-      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
-    		});
-  		});
-  		message.channel.send(`${args[0].slice(0,21)} 25 poena za gospodina!!!`);
+        	} else {
+          		sql.run(`UPDATE scores SET reputation = ${row.reputation + 25} WHERE userId = ${args[0].slice(2,20)}`);
+        	}
+     		  }).catch(() => {
+        		console.error;
+          		sql.run("CREATE TABLE IF NOT EXISTS scores (userId TEXT, reputation INTEGER)").then(() => {
+          		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
+        		});
+      		});
+      		message.channel.send(`${args[0].slice(0,21)} 25 poena za gospodina!!!`);
+        }
       }
-    }
- 	    })
-    }
+   	    })
+      }
 
-  	if (command === "-rep"){
-      sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
-      if (!row){
-        sql.run("INSERT INTO scores (userId, reputation, time) VALUES (?, ?, ?)", [message.author.id, 0, 0]);
-        vreme = 0;
-      }
-      else {
-        sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
-        vreme = row.time;
-      }
-      if (message.author.id !== `${args[0]}`.slice(2,20)){
-      if (timestamp === vreme){
-        message.author.send('maksimalni broj tipova je 2 po danu');
-        message.channel.send('.!.');
-      }
-      else{
-  		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
-    	if (!row) {
-      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), -15]);
-    	} else {
-      		sql.run(`UPDATE scores SET reputation = ${row.reputation - 15} WHERE userId = ${args[0].slice(2,20)}`);
-    	}
-  		}).catch(() => {
-    		console.error;
-      		sql.run("CREATE TABLE IF NOT EXISTS scores (userId TEXT, reputation INTEGER)").then(() => {
-      		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
-    		});
-  		});
-  		message.channel.send(`${args[0].slice(0,21)}-15 poena za gospodina!!!`)
-      }
-      }
-      }
- 	  )}
+    	if (command === "-rep"){
+        sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
+        if (!row){
+          sql.run("INSERT INTO scores (userId, reputation, time) VALUES (?, ?, ?)", [message.author.id, 0, 0]);
+          vreme = 0;
+        }
+        else {
+          sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
+          vreme = row.time;
+        }
+        if (message.author.id !== `${args[0]}`.slice(2,20)){
+          if (timestamp === vreme){
+            message.author.send('maksimalni broj tipova je 2 po danu');
+            message.channel.send('.!.');
+          }
+          else{
+        		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
+          	if (!row) {
+            		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), -15]);
+          	} else {
+            		sql.run(`UPDATE scores SET reputation = ${row.reputation - 15} WHERE userId = ${args[0].slice(2,20)}`);
+          	}
+        		}).catch(() => {
+          		console.error;
+            		sql.run("CREATE TABLE IF NOT EXISTS scores (userId TEXT, reputation INTEGER)").then(() => {
+            		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
+          		});
+        		});
+        		message.channel.send(`${args[0].slice(0,21)}-15 poena za gospodina!!!`)
+          }
+        }
+        }
+   	  )}
   }
 
  	if(command === "rep"){
@@ -197,7 +197,7 @@ client.on("message", message => {
       	if (!row) return message.reply("Tvoja reputacija je 0!");
       		message.reply(`Tvoja reputacija je ${row.reputation}!`);
     	});
-  	}
+  }
 
  	if(command === "showrep"){
     sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
@@ -209,7 +209,6 @@ client.on("message", message => {
   	if(command === "help"){
     	message.reply(`commands: \n \n !kick @user - kikuj djidjana \n \n !mute @user - mutuj djidjana \n \n !unmute @user - unmutuj djidjana \n \n !ban @user - banuj djidjana \n \n !ping - proveri ping \n \n !say nesto - reci cigiju da slaze \n \n !+rep @user - povecaj nekom reputaciju \n \n !-rep @user - smanji nekom reputaciju \n \n !rep - proveri svoju reputaciju \n \n !showrep @user - proveri neciju reputaciju`);
   	}
-
 })
 
 client.login(config.token);
