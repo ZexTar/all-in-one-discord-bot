@@ -120,8 +120,10 @@ client.on("message", message => {
         vreme = row.time;
       }
       
-      if (timestamp === vreme)
-        message.author.send('samo jednom dnevno bajo');
+      if (timestamp === vreme){
+        message.author.send('maksimalni broj tipova je 2 po danu');
+        message.channel.send('.!.');
+      }
       else{
   		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
     	if (!row) {
@@ -152,8 +154,10 @@ client.on("message", message => {
         vreme = row.time;
       }
       
-      if (timestamp === vreme)
-        message.author.send('mozes da glasas samo jednom dnevno');
+      if (timestamp === vreme){
+        message.author.send('maksimalni broj tipova je 2 po danu');
+        message.channel.send('.!.');
+      }
       else{
   		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
     	if (!row) {
