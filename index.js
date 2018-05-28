@@ -120,7 +120,7 @@ client.on("message", message => {
     const command = args.shift().toLowerCase();
     let timestamp = new Date().getDate();
     let vreme;
-
+    if (message.author.id !== "449929510645661696"){
   	if (command === "+rep"){
       sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
       if (!row){
@@ -150,7 +150,7 @@ client.on("message", message => {
       		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
     		});
   		});
-  		message.channel.send(`${args[0].slice(0,21)} je zaradio 25 poena!!!`);
+  		message.channel.send(`${args[0].slice(0,21)} 25 poena za gospodina!!!`);
       }
  	    })
     }
@@ -183,10 +183,10 @@ client.on("message", message => {
       		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
     		});
   		});
-  		message.channel.send(`${args[0].slice(0,21)} je izgubio 15 poena!!!`)
+  		message.channel.send(`${args[0].slice(0,21)}-15 poena za gospodina!!!`)
       }
       }
- 	  )}
+ 	  )}}
  	if(command === "rep"){
     	sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
       	if (!row) return message.reply("Tvoja reputacija je 0!");
