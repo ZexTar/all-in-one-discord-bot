@@ -101,27 +101,60 @@ client.on('message', message => {
 		}
 });
 
+
+
 client.on("message", message => {
 	const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-  	const command = args.shift().toLowerCase();
+  const command = args.shift().toLowerCase();
+  let timestamp = new Date().getDate();
+  let vreme;
 
   	if (command === "+rep"){
+      sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
+      if (!row){
+        sql.run("INSERT INTO scores (userId, reputation, time) VALUES (?, ?, ?)", [message.author.id, 0, 0]);
+        vreme = 0;
+      }
+      else {
+        sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
+        vreme = row.time;
+      }
+      
+      if (timestamp === vreme)
+        message.author.send('samo jednom dnevno bajo');
+      else{
   		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
     	if (!row) {
       		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), 25]);
+
     	} else {
       		sql.run(`UPDATE scores SET reputation = ${row.reputation + 25} WHERE userId = ${args[0].slice(2,20)}`);
     	}
- 		}).catch(() => {
+ 		  }).catch(() => {
     		console.error;
       		sql.run("CREATE TABLE IF NOT EXISTS scores (userId TEXT, reputation INTEGER)").then(() => {
       		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20)]);
     		});
   		});
   		message.channel.send(`${args[0].slice(0,21)} je zaradio 25 poena!!!`);
- 	}
+      }
+ 	    })
+    }
 
   	if (command === "-rep"){
+      sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
+      if (!row){
+        sql.run("INSERT INTO scores (userId, reputation, time) VALUES (?, ?, ?)", [message.author.id, 0, 0]);
+        vreme = 0;
+      }
+      else {
+        sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
+        vreme = row.time;
+      }
+      
+      if (timestamp === vreme)
+        message.author.send('samo jednom dnevno bajo');
+      else{
   		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
     	if (!row) {
       		sql.run("INSERT INTO scores (userId, reputation) VALUES (?, ?)", [args[0].slice(2,20), -15]);
@@ -135,7 +168,9 @@ client.on("message", message => {
     		});
   		});
   		message.channel.send(`${args[0].slice(0,21)} je izgubio 15 poena!!!`)
- 	}
+    }
+    }
+ 	)}
 
  	if(command === "rep"){
     	sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
