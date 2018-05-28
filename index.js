@@ -153,7 +153,7 @@ client.on("message", message => {
       }
       
       if (timestamp === vreme)
-        message.author.send('samo jednom dnevno bajo');
+        message.author.send('mozes da glasas samo jednom dnevno');
       else{
   		sql.get(`SELECT * FROM scores WHERE userId ="${args[0].slice(2,20)}"`).then(row => {
     	if (!row) {
@@ -168,9 +168,9 @@ client.on("message", message => {
     		});
   		});
   		message.channel.send(`${args[0].slice(0,21)} je izgubio 15 poena!!!`)
-    }
-    }
- 	)}
+      }
+      }
+ 	  )}
 
  	if(command === "rep"){
     	sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
