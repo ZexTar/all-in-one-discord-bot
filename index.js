@@ -5,6 +5,18 @@ const sql = require("sqlite");
 const client = new Discord.Client();
 sql.open("./scores.sqlite");
 
+ 
+client.on('ready', () => {
+  setInterval(function(){
+    let remTime = new Date().getHours();
+    console.log(remTime);
+    if (remTime == 22){
+      let channel = client.channels.get('261953065970696192');
+      channel.send("@everyone, mozete dodeliti/oduzeti nekom reputaciju samo 2 puta dnevno, ako je neko zaboravio da to ucini moze uraditi do ponoci, nakon toga se counteri resetuju na 2! Dodavanje/oduzimanje mozete izvrsiti: 1.privatno - tako sto cete poslati PM botu ili  2.javno - u nekom od kanala.");
+    }
+  }, 1800000);
+});
+
 client.on("message", async message => {
 	const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   	const command = args.shift().toLowerCase();
@@ -104,10 +116,10 @@ client.on('message', message => {
 
 
 client.on("message", message => {
-	const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
-  let timestamp = new Date().getDate();
-  let vreme;
+	 const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
+    let timestamp = new Date().getDate();
+    let vreme;
 
   	if (command === "+rep"){
       sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
@@ -175,7 +187,6 @@ client.on("message", message => {
       }
       }
  	  )}
-
  	if(command === "rep"){
     	sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
       	if (!row) return message.reply("Tvoja reputacija je 0!");
