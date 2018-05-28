@@ -116,10 +116,11 @@ client.on('message', message => {
 
 
 client.on("message", message => {
-	 const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+	  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     let timestamp = new Date().getDate();
     let vreme;
+
     if (message.author.id !== "449929510645661696"){
   	if (command === "+rep"){
       sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
@@ -131,7 +132,7 @@ client.on("message", message => {
         sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
         vreme = row.time;
       }
-      
+      if (message.author.id !== `${args[0]}`.slice(2,20)){
       if (timestamp === vreme){
         message.author.send('maksimalni broj tipova je 2 po danu');
         message.channel.send('.!.');
@@ -152,6 +153,7 @@ client.on("message", message => {
   		});
   		message.channel.send(`${args[0].slice(0,21)} 25 poena za gospodina!!!`);
       }
+    }
  	    })
     }
 
@@ -165,7 +167,7 @@ client.on("message", message => {
         sql.run(`UPDATE scores SET time = ${timestamp} WHERE userId = ${message.author.id}`);
         vreme = row.time;
       }
-      
+      if (message.author.id !== `${args[0]}`.slice(2,20)){
       if (timestamp === vreme){
         message.author.send('maksimalni broj tipova je 2 po danu');
         message.channel.send('.!.');
@@ -186,7 +188,10 @@ client.on("message", message => {
   		message.channel.send(`${args[0].slice(0,21)}-15 poena za gospodina!!!`)
       }
       }
- 	  )}}
+      }
+ 	  )}
+  }
+
  	if(command === "rep"){
     	sql.get(`SELECT * FROM scores WHERE userId ="${message.author.id}"`).then(row => {
       	if (!row) return message.reply("Tvoja reputacija je 0!");
